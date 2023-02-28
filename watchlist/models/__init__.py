@@ -1,0 +1,2 @@
+from .movies_model import add_movie, find_all_movies, find_movie_by_imdb_id, find_movie_by_name, delete_movie_by_id, update_movie_scores_by_id, create_table_if_not_exist, is_table_exist
+from .status_model import add_watch_status, delete_watch_status_by_movie_id, mark_as_watched, mark_as_unwatched, get_watch_status_by_movie_id, is_watched

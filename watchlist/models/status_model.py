@@ -1,0 +1,76 @@
+from ..services.mysql_service import MySQLService
+
+table_name = "watch_status"
+create_table_query = \
+f"""
+    CREATE TABLE IF NOT EXISTS {table_name} (
+	id INT NOT NULL AUTO_INCREMENT,
+	movie_id INT NOT NULL,
+    watch_status TINYINT(1),
+	PRIMARY KEY(id)
+    );
+"""
+
+mysql_service = MySQLService()
+
+def where_condition_handling(column, operator, value):
+
+    return [
+        {
+            'column': column,
+            'operator': operator,
+            'value': value
+        }
+    ]
+
+def add_watch_status(movie_id, watch_status):
+
+    movie_data = {
+        'movie_id': int(movie_id),
+        'watch_status': int(watch_status)
+    }
+
+    result = mysql_service.insert(table_name, movie_data)
+    return result
+
+def delete_watch_status_by_movie_id(movie_id):
+
+    where_condition = where_condition_handling("movie_id", "=", movie_id)
+
+    result = mysql_service.delete(table_name, where_condition)
+    return result
+
+def update_watch_status(movie_id, watch_status):
+
+    set_data = {'watch_status': int(watch_status)}
+
+    where_condition = where_condition_handling("movie_id", "=", movie_id)
+
+    result = mysql_service.update(table_name, set_data, where_condition)
+    return result
+
+def mark_as_watched(movie_id):
+    return update_watch_status(movie_id, True)
+
+def mark_as_unwatched(movie_id):
+    return update_watch_status(movie_id, False)
+
+def get_watch_status_by_movie_id(movie_id):
+
+    where_condition = where_condition_handling("movie_id", "=", movie_id)
+
+    columns = ['watch_status']
+
+    result = mysql_service.select_one(table_name, columns, where_data = where_condition)
+
+    return bool(result['watch_status'])
+
+def is_watched(movie_id):
+    return get_watch_status_by_movie_id(movie_id)
+
+def create_table_if_not_exist():
+    if not is_table_exist('watch_status'):
+        mysql_service.raw_query(create_table_query)
+
+def is_table_exist(table_name):
+    return mysql_service.is_table_exist(table_name)
