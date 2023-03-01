@@ -35,7 +35,6 @@ def handle_cli_args_example():
 
 if __name__ == "__main__":
 
-    # status = add_controller.add("Titanic")
 
     try:
 

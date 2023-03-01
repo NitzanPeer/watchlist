@@ -4,30 +4,15 @@ from ..services import movie_api
 # should we put these in an init file and import it as a whole?:
 from ..services import ui_service
 
-# from watchlist.services.mysql_service import MySQLService
-# mysql_service = MySQLService
 
-
-
-# TODO: follow the planning of add as a guideline for this function, think of the controller as a recipe or instructions
-# remember! every time you need to convert/change/manipulate data between functions, create here a function for it and call it from the "add" function
-
-
-# TODO: what's happening when you are trying to add an already existing movie? (DONE)
 def add(movie_name):
 
-        chosen_tmdb_id = interactive_selection_menu(movie_name)
-        movie_data = movie_api.get(chosen_tmdb_id)
-
-        # where should this exception sit if not here?
-        if is_movie_exists(movie_data['imdb_id']):
-            raise exceptions.MovieAlreadyExistsError(f"\nThe movie {movie_name} already exists.")
-
-
-        movie_id = add_movie_to_db(movie_data)
-        watch_status = get_watch_status_from_user(movie_id)
-        models.add_watch_status(movie_id, watch_status)
-        ui_service.print_add_movie_summary(movie_name)
+    chosen_tmdb_id = interactive_selection_menu(movie_name)
+    movie_data = movie_api.get(chosen_tmdb_id)
+    movie_id = add_movie_to_db(movie_data)
+    watch_status = get_watch_status_from_user(movie_id)
+    models.add_watch_status(movie_id, watch_status)
+    ui_service.print_add_movie_summary(movie_name)
 
 
 def interactive_selection_menu(movie_name):
@@ -38,14 +23,12 @@ def interactive_selection_menu(movie_name):
     while no_choice_made:
 
         response = movie_api.search(movie_name, page_num)
-        # initialization happens needlessly each iteration but the line depends on response:
 
         page_results = response['results']
         total_num_of_pages = response['total_pages']
 
         if not page_results:
-            # TODO: throw custom exception to exit the application at the controller stage (DONE)
-            raise exceptions.NoMoviesFoundError(f"\nNo movies named {movie_name} are found.")
+            raise exceptions.NoMoviesFoundError(f"No movies named {movie_name} are found.")
 
 
         print_worthy_list = []
@@ -67,7 +50,7 @@ def interactive_selection_menu(movie_name):
 
         elif page_num == 1:
             valid_choices.append('n')
-            query = "\nChoose an option number or 'n' for previous page:\n"
+            query = "\nChoose an option number or 'n' for next page:\n"
 
         else:
             valid_choices.extend(['n', 'p'])
@@ -87,14 +70,13 @@ def interactive_selection_menu(movie_name):
         elif user_input == 'p':
             page_num -= 1
 
-    print(f"\nmovie id is - {movie_id}\n")
     return movie_id
 
 
 def add_movie_to_db(movie_data):
 
-    # get movie
-    # if not exist - create
+    if is_movie_exists(movie_data['imdb_id']):
+        raise exceptions.MovieAlreadyExistsError(f"\nThe movie {movie_data['name']} already exists.")
 
     movie_id = models.add_movie(
         name=movie_data['name'],
@@ -128,29 +110,22 @@ def get_watch_status_from_user(movie_id):
     valid_choices = ['y', 'n', 'Y', 'N']
     input = ui_service.get_input_valid_choice(valid_choices, query)
 
+    # could be one line:
     if input == 'y' or input == 'Y':
         models.mark_as_watched(movie_id)
-        result = 1
+        result = True
     if input == 'n' or input == 'N':
         models.mark_as_unwatched(movie_id)
-        result = 0
+        result = False
 
     return result
 
 
 def is_movie_exists(imdb_id):
-    return True if models.find_movie_by_imdb_id(imdb_id) else False
+    return bool(models.find_movie_by_imdb_id(imdb_id))
 
 
 
-
-# DONE:
-# 1. initial error fixed (status marking funcs returned nothing instead of 0 or 1)
-# 2. exceptions for "no movies found" and "movie already exists" added
-# 3. fixed bad condition for "no movies found" exception (even if no movies found page num is still 1)
-# 4. is_movie_exists added
-# 5. query now prints relevant options to the specific page ('n' / 'p' / 'n' + 'p')
-# 6. genres_one_string in add_movie deleted
 
 #TODO:
 # validation (raise exception for null values in non-null columnns)

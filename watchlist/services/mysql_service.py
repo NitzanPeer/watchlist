@@ -107,6 +107,7 @@ class MySQLService:
         return bool(result)
 
     def raw_query(self, query, is_commit=True):
+        print(query)
         self.cursor.execute(query)
         if is_commit:
             self.connection.commit()
@@ -152,9 +153,28 @@ class MySQLService:
     def __dict_to_key_list(self, dictionary):
         return ', '.join(list(dictionary.keys()))
 
+    # TODO: fix null treated as a string (prob lies in the return making the entire thing a str, need to change the method from slicing to something else)
     def __dict_to_value_list(self, dictionary):
-        value_list = f"{list(dictionary.values())}"
-        return value_list[1:-1]
+
+        new_list = []
+
+        for key in dictionary:
+            converted_value = self.__convert_python_value_to_sql(dictionary[key])
+            new_list.append(converted_value)
+
+        return str(new_list)[1:-1]
+
+
+    def __convert_python_value_to_sql(self, item_to_convert):
+
+        if isinstance(item_to_convert, bool):
+            item_to_convert = int(item_to_convert)
+
+        elif item_to_convert == None:
+            item_to_convert = 'null'
+
+        return item_to_convert
+
 
     def __set_clause_handling(self, set_data):
 
@@ -164,7 +184,9 @@ class MySQLService:
             if isinstance(set_data[key], str):
                 set_clause += f"{key} = '{set_data[key]}'"
             else:
-                set_clause += f"{key} = {set_data[key]}"
+                value = self.__convert_python_value_to_sql(set_data[key])
+                set_clause += f"{key} = {value}"
+
             set_clause += ", "
 
         return set_clause[:-2] if set_clause else set_clause
@@ -181,7 +203,8 @@ class MySQLService:
             if isinstance(dictionary['value'], str):
                 value = f"'{dictionary['value']}'"
             else:
-                value = f"{dictionary['value']}"
+                value = self.__convert_python_value_to_sql(dictionary['value'])
+                value = f"{value}"
 
             where_clause += column + operator + value
             where_clause += " AND "
