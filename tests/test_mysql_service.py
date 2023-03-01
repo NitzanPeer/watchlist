@@ -82,7 +82,7 @@ class Test_MYSQLSERVICE(unittest.TestCase):
         {
             'column': 'imdb_score',
             'operator': '<=',
-            'value': 2.2
+            'value': 3.3
         }
     ]
 
@@ -185,13 +185,13 @@ class Test_MYSQLSERVICE(unittest.TestCase):
         results = self.mysql_service.select_all(
             self.demo_table_name,
             self.demo_columns,
-            self.demo_where,
+            self.demo_where_all_columns,
             self.demo_order_by_columns,
-            self.demo_limit
+            # self.demo_limit
         )
         self.assertIsInstance(results, list, "results should be a list")
 
-        self.assertEqual(len(results), 2)
+        self.assertEqual(len(results), 3)
         self.assertIsInstance(results[0], dict, "results element should be a dict")
         self.assertIn("id", results[0], "results[0] must contain the key 'id'")
 

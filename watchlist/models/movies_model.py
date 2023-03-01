@@ -48,13 +48,12 @@ def __find_movie_by_column(column_name, column_value, columns=[]):
 
 def add_movie(name, year, director, genres, imdb_id, imdb_score, rotten_tomatoes_score, description):
 
-    genres_one_string = ", ".join(genres)
 
     movie_info = {
         'name': name,
         'year': year,
         'director': director,
-        'genres': genres_one_string,
+        'genres': genres,
         'imdb_id': imdb_id,
         'imdb_score': imdb_score,
         'rotten_tomatoes_score': rotten_tomatoes_score,

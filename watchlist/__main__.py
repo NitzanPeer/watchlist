@@ -35,12 +35,14 @@ def handle_cli_args_example():
 
 if __name__ == "__main__":
 
-    status = add_controller.add("Titanic")
+    # status = add_controller.add("Titanic")
 
     try:
 
-        add_controller.add("Titanic")
+        status = add_controller.add("Titanic")
+
     except MovieError as e:
         print(e)
-        print(dir(e))
-        print(vars(e))
+        # print(dir(e))
+        # print(vars(e))
+

@@ -51,11 +51,17 @@ class MySQLService:
         self.__raw_select(table_name, columns, where_data, order_by_columns, limit)
         return self.cursor.fetchall()
 
-    # TODO: check why matrix got the description of fight club??? maybe some other elements are fucked
     def insert(self, table_name, insert_data):
 
         key_list = self.__dict_to_key_list(insert_data)
         value_list = self.__dict_to_value_list(insert_data)
+
+        #TODO: TEST prints
+        print("=====================")
+        print(key_list)
+        print(value_list)
+        print("=====================")
+        # print(insert_data)
 
         try:
             self.raw_query(f"INSERT INTO {table_name} ({key_list}) VALUES ({value_list});")

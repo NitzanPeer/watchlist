@@ -1,5 +1,6 @@
 from tabulate import tabulate
 
+#undeeded?
 def print_no_movies_found_error(movie_name):
     print(f"No movie named {movie_name} was found.")
 
@@ -56,5 +57,3 @@ def is_valid_choice(choice, valid_choices):
 def print_add_movie_summary(movie_name):
     print(f"\nThe movie {movie_name} was added to the database.\n")
 
-def print_movie_already_exists_error(movie_name):
-    print(f"The movie {movie_name} already exists.")
