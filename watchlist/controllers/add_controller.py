@@ -10,8 +10,10 @@ def add(movie_name):
     chosen_tmdb_id = interactive_selection_menu(movie_name)
     movie_data = movie_api.get(chosen_tmdb_id)
     movie_id = add_movie_to_db(movie_data)
-    watch_status = util.get_watch_status_from_user(movie_id)
-    models.add_watch_status(movie_id, watch_status)
+
+    query = "Did you watch this movie? ('y' for yes, 'n' for no)"
+    models.add_watch_status(movie_id, ui_service.confirm_choice(query))
+
     ui_service.print_add_movie_summary(movie_name)
 
 def interactive_selection_menu(movie_name):
@@ -86,7 +88,7 @@ def add_movie_to_db(movie_data):
 
     return movie_id
 
-# this func doesn't include progression:
+# TODO: this func doesn't include progression:
 def get_five_results(page_results, starting_point):
     five_results = []
 
@@ -99,7 +101,6 @@ def get_five_results(page_results, starting_point):
 
 def is_movie_exists(imdb_id):
     return bool(models.find_movie_by_imdb_id(imdb_id))
-
 
 
 

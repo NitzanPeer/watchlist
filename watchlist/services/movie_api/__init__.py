@@ -22,10 +22,10 @@ def get(tmdb_id):
 
         "genres": get_genres_as_string(tmdb_result["genres"]),
 
-        "year": tmdb_result["release_date"][:4],
+        "year": int(tmdb_result["release_date"][:4]),
         "description": tmdb_result["overview"],
         "imdb_id": tmdb_result["imdb_id"],
-        "imdb_score": omdb_result["imdbRating"],
+        "imdb_score": float(omdb_result["imdbRating"]),
 
         "rotten_tomatoes_score":OmdbAPI.get_rt_rating(omdb_result['Ratings']),
 

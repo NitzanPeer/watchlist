@@ -37,11 +37,15 @@ def handle_cli_args_example():
 
 if __name__ == "__main__":
 
+    # TODO: clean code from comments and prints
+    # TODO: migrate/convert all movie "name" to movie "title" - this includes variables like movie_name
+    # TODO: create a new flow/controller for display
+
 
     try:
 
-        status = add_controller.add("titanic")
-        # update = update_controller.update("titanic")
+        # status = add_controller.add("titanic")
+        update = update_controller.update("titanic")
         # delete = delete_controller.delete("titanic")
 
     except MovieError as e:

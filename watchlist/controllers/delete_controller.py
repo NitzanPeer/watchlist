@@ -17,11 +17,8 @@ def delete(movie_name):
 
     movie_id = interactive_selection_menu(movie_name)
 
-    if deletion_second_confirmation(movie_name):
-        models.delete_movie_by_id(movie_id)
-        ui_service.print_delete_movie_summary(movie_name)
-    else:
-        ui_service.print_movie_was_not_deleted()
+    models.delete_movie_by_id(movie_id)
+    ui_service.print_delete_movie_summary(movie_name)
 
 
 def interactive_selection_menu(movie_name):
@@ -41,12 +38,9 @@ def interactive_selection_menu(movie_name):
 
     if len(movies_found) == 1:
 
-        valid_choices = ['y', 'n', 'Y', 'N']
         query = "Is this the movie you were looking for? (enter 'y' or 'n')"
-        user_input = ui_service.get_input_valid_choice(valid_choices, query)
 
-
-        if user_input in ['y', 'Y']:
+        if ui_service.confirm_choice(query):
             movie_id = movies_found[0]['id']
 
         else:
@@ -67,13 +61,3 @@ def interactive_selection_menu(movie_name):
                 movie_id = movies_found[int(user_input)-1]['id']
 
     return movie_id
-
-
-
-def deletion_second_confirmation(movie_name):
-    valid_choices = ['y', 'n', 'Y', 'N']
-    query = f"Are you sure you want to delete the movie {movie_name}? (enter 'y' for Yes or 'n' for No)"
-
-    user_input = ui_service.get_input_valid_choice(valid_choices, query)
-
-    return True if user_input in ['y', 'Y'] else False

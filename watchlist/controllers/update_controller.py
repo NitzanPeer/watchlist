@@ -6,21 +6,13 @@ from ..services import util
 
 
 def update(movie_name):
-    # we use the movie_name to select all the movies with said name and show the user
-    # if empty list raise exception (which the main will catch)
-    # if one result - show confirmation screen (is this the movie you wanted?)
-        #  yes - continue with said movie
-        #  no - raise exception (similar to no result)
-    # if more than one result - show results and let the user pick between them
-    # ask user for watch status
-    # update watch status
-    # show summary of action
 
 
     movie_id = interactive_selection_menu(movie_name)
-    watch_status = util.get_watch_status_from_user(movie_id)
-    # do we need update_result?
-    update_status(movie_id)
+    query = "Did you watch this movie? ('y' for yes, 'n' for no)"
+    watch_status = ui_service.confirm_choice(query)
+    models.update_watch_status(movie_id, watch_status)
+
     ui_service.print_update_movie_summary(movie_name, watch_status)
 
 
@@ -43,13 +35,9 @@ def interactive_selection_menu(movie_name):
 
     if len(movies_found) == 1:
 
-        # repeats, move to util
-        valid_choices = ['y', 'n', 'Y', 'N']
-        query = "Is this the movie you were looking for? (enter 'y' for YES or 'n' for NO)"
-        user_input = ui_service.get_input_valid_choice(valid_choices, query)
+        query = "Is this the movie you were looking for? (enter 'y' or 'n')"
 
-
-        if user_input in ['y', 'Y']:
+        if ui_service.confirm_choice(query):
             movie_id = movies_found[0]['id']
 
         else:
@@ -63,28 +51,10 @@ def interactive_selection_menu(movie_name):
             valid_choices = list(map(lambda a : str(a), int_list))
 
             query = "Choose an option number:"
-
             user_input = ui_service.get_input_valid_choice(valid_choices, query)
-
-            if user_input.isdecimal():
-
-                movie_id = movies_found[int(user_input)-1]['id']
-
-    # else - raise exception for invalid input?
+            movie_id = movies_found[int(user_input)-1]['id']
 
     return movie_id
-
-
-def update_status(movie_id, watch_status):
-
-    models.is_watched(movie_id)
-    if watch_status:
-        result = models.mark_as_watched
-    else:
-        result = models.mark_as_unwatched
-
-    return result
-
 
 
 

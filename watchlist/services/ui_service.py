@@ -1,4 +1,5 @@
 from tabulate import tabulate
+from ..services import ui_service
 
 
 # options = list of dicts/lists (like rows in table)
@@ -43,12 +44,28 @@ def get_input_valid_choice(valid_choices, query):
 def is_valid_choice(choice, valid_choices):
     return choice in valid_choices
 
+def confirm_choice(query):
+
+    valid_choices = ['y', 'n', 'Y', 'N', 'yes', 'YES', 'no', 'NO']
+    input = ui_service.get_input_valid_choice(valid_choices, query)
+
+    return True if input in ['y', 'Y', 'YES', 'yes'] else False
+
+
+
+
+
+
+
+
+
+
 def print_add_movie_summary(movie_name):
     print(f"\nThe movie {movie_name} was added to the database.\n")
 
-def print_update_movie_summary(movie_name, binary_status):
-    print(binary_status)
-    status = '"Watched"' if binary_status else '"Not Watched"'
+def print_update_movie_summary(movie_name, is_watched):
+    print(is_watched)
+    status = '"Watched"' if is_watched else '"Not Watched"'
     print(f"\nThe movie {movie_name}'s watch status was updated to {status}.\n")
 
 def print_delete_movie_summary(movie_name):
@@ -56,7 +73,4 @@ def print_delete_movie_summary(movie_name):
 
 def print_movie_was_not_deleted():
     print(f"\nThe movie was not deleted.\n")
-
-
-
 

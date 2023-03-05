@@ -1,4 +1,5 @@
 import mysql.connector
+from mysql.connector.conversion import MySQLConverter
 
 class MySQLService:
 
@@ -180,12 +181,15 @@ class MySQLService:
         if isinstance(item_to_convert, bool):
             item_to_convert = int(item_to_convert)
 
-        if isinstance(item_to_convert, str) and len(item_to_convert) > 0:
-            item_to_convert = item_to_convert.replace("'", "\\'")
+        elif isinstance(item_to_convert, str):
+
+            item_to_convert = MySQLConverter.escape(item_to_convert)
             item_to_convert = f"'{item_to_convert}'"
 
-        if item_to_convert == None or item_to_convert == '':
+        elif item_to_convert == None:
             item_to_convert = 'null'
+
+        item_to_convert = str(item_to_convert)
 
 
         return item_to_convert
