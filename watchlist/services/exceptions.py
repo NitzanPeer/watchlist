@@ -6,3 +6,6 @@ class NoMoviesFoundError(MovieError):
 
 class MovieAlreadyExistsError(MovieError):
     pass
+
+class StatusAlreadyMarkedThatWay(MovieError):
+    pass

@@ -7,7 +7,7 @@ CREATE TABLE movies IF NOT EXISTS (
 	description TEXT,
 	imdb_id VARCHAR(11),
 	imdb_score FLOAT(3),
-	rotten_tomatoes_score INT,
+	rotten_tomatoes_score INT(3),
     watch_status TINYINT(1),
 	PRIMARY KEY(id)
 );

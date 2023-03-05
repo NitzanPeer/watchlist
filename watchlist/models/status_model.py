@@ -1,4 +1,5 @@
 from ..services.mysql_service import MySQLService
+from ..services import exceptions
 
 table_name = "watch_status"
 create_table_query = \
@@ -42,6 +43,10 @@ def delete_watch_status_by_movie_id(movie_id):
 
 def update_watch_status(movie_id, watch_status):
 
+    if is_watched(movie_id) == watch_status:
+        status = '"Watched"' if watch_status else '"Not Watched"'
+        raise exceptions.StatusAlreadyMarkedThatWay(f"Status is already marked as {status}.")
+
     set_data = {'watch_status': int(watch_status)}
 
     where_condition = where_condition_handling("movie_id", "=", movie_id)
@@ -61,9 +66,17 @@ def get_watch_status_by_movie_id(movie_id):
 
     columns = ['watch_status']
 
+    #TODO: test print:
+
+    print(f"RESULT ==== {table_name, columns, where_condition}")
+
     result = mysql_service.select_one(table_name, columns, where_data = where_condition)
 
-    return bool(result['watch_status'])
+    #TODO: test print:
+    print(f"RESULT ==== {result}")
+
+
+    return bool(result['watch_status']) if result else None
 
 def is_watched(movie_id):
     return get_watch_status_by_movie_id(movie_id)

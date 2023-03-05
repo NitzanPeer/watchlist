@@ -1,8 +1,8 @@
 from ..services import exceptions
 from .. import models
 from ..services import movie_api
-# should we put these in an init file and import it as a whole?:
 from ..services import ui_service
+from ..services import util
 
 
 def add(movie_name):
@@ -10,10 +10,9 @@ def add(movie_name):
     chosen_tmdb_id = interactive_selection_menu(movie_name)
     movie_data = movie_api.get(chosen_tmdb_id)
     movie_id = add_movie_to_db(movie_data)
-    watch_status = get_watch_status_from_user(movie_id)
+    watch_status = util.get_watch_status_from_user(movie_id)
     models.add_watch_status(movie_id, watch_status)
     ui_service.print_add_movie_summary(movie_name)
-
 
 def interactive_selection_menu(movie_name):
 
@@ -28,19 +27,16 @@ def interactive_selection_menu(movie_name):
         total_num_of_pages = response['total_pages']
 
         if not page_results:
-            raise exceptions.NoMoviesFoundError(f"No movies named {movie_name} are found.")
+            raise exceptions.NoMoviesFoundError(f"No movies named {movie_name} were found.")
 
-
+        # repeats, move to util:
         print_worthy_list = []
         for result in page_results:
             print_worthy_list.append({'name': result['title'], 'year': result['release_date'][:4]})
 
-        # get_five_results here (not working yet):
-        # five_options = get_five_results()
-
         ui_service.print_options_table(["name", "year"], print_worthy_list)
 
-
+        # repeats, move to util:
         int_list = list(range(1, len(page_results)+1))
         valid_choices = list(map(lambda a : str(a), int_list))
 
@@ -72,7 +68,6 @@ def interactive_selection_menu(movie_name):
 
     return movie_id
 
-
 def add_movie_to_db(movie_data):
 
     if is_movie_exists(movie_data['imdb_id']):
@@ -91,7 +86,6 @@ def add_movie_to_db(movie_data):
 
     return movie_id
 
-
 # this func doesn't include progression:
 def get_five_results(page_results, starting_point):
     five_results = []
@@ -103,24 +97,6 @@ def get_five_results(page_results, starting_point):
     for result in page_results[starting_point:]:
         five_results.append(result)
 
-
-def get_watch_status_from_user(movie_id):
-
-    query = "Did you watch this movie? ('y' for yes, 'n' for no)"
-    valid_choices = ['y', 'n', 'Y', 'N']
-    input = ui_service.get_input_valid_choice(valid_choices, query)
-
-    # could be one line:
-    if input == 'y' or input == 'Y':
-        models.mark_as_watched(movie_id)
-        result = True
-    if input == 'n' or input == 'N':
-        models.mark_as_unwatched(movie_id)
-        result = False
-
-    return result
-
-
 def is_movie_exists(imdb_id):
     return bool(models.find_movie_by_imdb_id(imdb_id))
 
@@ -130,8 +106,6 @@ def is_movie_exists(imdb_id):
 #TODO:
 # validation (raise exception for null values in non-null columnns)
 # map()?
-
-# INSERT to UPSERT
 
 # when trying to insert Titanic option 4 it throws "Unknown column 'None' in 'field list'" error
     # 1. why is it talking about the column if the "None" is a column value?

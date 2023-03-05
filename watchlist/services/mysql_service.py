@@ -56,13 +56,6 @@ class MySQLService:
         key_list = self.__dict_to_key_list(insert_data)
         value_list = self.__dict_to_value_list(insert_data)
 
-        #TODO: TEST prints
-        print("=====================")
-        print(key_list)
-        print(value_list)
-        print("=====================")
-        # print(insert_data)
-
         try:
             self.raw_query(f"INSERT INTO {table_name} ({key_list}) VALUES ({value_list});")
             result = self.cursor.lastrowid
@@ -107,7 +100,9 @@ class MySQLService:
         return bool(result)
 
     def raw_query(self, query, is_commit=True):
+        #TODO: test prints:
         print(query)
+        print("=========")
         self.cursor.execute(query)
         if is_commit:
             self.connection.commit()
@@ -156,13 +151,28 @@ class MySQLService:
     # TODO: fix null treated as a string (prob lies in the return making the entire thing a str, need to change the method from slicing to something else)
     def __dict_to_value_list(self, dictionary):
 
+        # test prints:
+        # print("dict:")
+        # print(dictionary)
+        # print("genres:")
+        # print(dictionary['genres'])
+        # print(type(dictionary['genres']))
+
         new_list = []
 
         for key in dictionary:
+
             converted_value = self.__convert_python_value_to_sql(dictionary[key])
             new_list.append(converted_value)
+        # test print:
+        # print(f"before - {new_list}")
+        # print(f"after - {str(', '.join(new_list))}")
+        # print(f"type - {type(str(', '.join(new_list)))}")
+        # print(f"slicing - {str(new_list)[1:-1]}")
 
-        return str(new_list)[1:-1]
+        return str(', '.join(new_list))
+        # if len(new_list) > 1 else
+        # return str(new_list)[1:-1]
 
 
     def __convert_python_value_to_sql(self, item_to_convert):
@@ -170,8 +180,13 @@ class MySQLService:
         if isinstance(item_to_convert, bool):
             item_to_convert = int(item_to_convert)
 
-        elif item_to_convert == None:
+        if isinstance(item_to_convert, str) and len(item_to_convert) > 0:
+            item_to_convert = item_to_convert.replace("'", "\\'")
+            item_to_convert = f"'{item_to_convert}'"
+
+        if item_to_convert == None or item_to_convert == '':
             item_to_convert = 'null'
+
 
         return item_to_convert
 

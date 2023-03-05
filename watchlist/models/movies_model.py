@@ -42,7 +42,7 @@ def where_condition_handling(column:str, operator:str, value:Any) -> int:
 def __find_movie_by_column(column_name, column_value, columns=[]):
 
     where_condition = where_condition_handling(column_name, "=", column_value)
-    result = mysql_service.select_one(table_name, columns, where_data=where_condition)
+    result = mysql_service.select_all(table_name, columns, where_data=where_condition)
 
     return result
 

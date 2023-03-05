@@ -1,3 +1,9 @@
+from ..services import exceptions
+from .. import models
+from ..services import ui_service
+from ..services import util
+
+
 def delete(movie_name):
     # # we use the movie_name to select all the movies with said name and show the user
     # if empty list raise exception (which the main will catch)
@@ -8,4 +14,66 @@ def delete(movie_name):
 
     # delete relevant movie in movies AND watch_status (IF NOT DELETED AUTO, CHECK IT WITH A MYSQL QUERY)
     # show summary of action
-    pass
+
+    movie_id = interactive_selection_menu(movie_name)
+
+    if deletion_second_confirmation(movie_name):
+        models.delete_movie_by_id(movie_id)
+        ui_service.print_delete_movie_summary(movie_name)
+    else:
+        ui_service.print_movie_was_not_deleted()
+
+
+def interactive_selection_menu(movie_name):
+    # validation? what if not a list?
+
+    movies_found = models.find_movie_by_name(movie_name)
+
+    if not movies_found:
+        raise exceptions.NoMoviesFoundError(f"No movies named {movie_name} were found.")
+
+    print_worthy_list = []
+    for movie in movies_found:
+        print_worthy_list.append({'name': movie['name'], 'year': movie['year']})
+
+    ui_service.print_options_table(["name", "year"], print_worthy_list)
+
+
+    if len(movies_found) == 1:
+
+        valid_choices = ['y', 'n', 'Y', 'N']
+        query = "Is this the movie you were looking for? (enter 'y' or 'n')"
+        user_input = ui_service.get_input_valid_choice(valid_choices, query)
+
+
+        if user_input in ['y', 'Y']:
+            movie_id = movies_found[0]['id']
+
+        else:
+            raise exceptions.NoMoviesFoundError(f"No movies were found.")
+
+
+    elif len(movies_found) > 1:
+
+            # repeated, move to util:
+            int_list = list(range(1, len(movies_found)+1))
+            valid_choices = list(map(lambda a : str(a), int_list))
+            query = "Choose an option number:"
+
+            user_input = ui_service.get_input_valid_choice(valid_choices, query)
+
+            if user_input.isdecimal():
+
+                movie_id = movies_found[int(user_input)-1]['id']
+
+    return movie_id
+
+
+
+def deletion_second_confirmation(movie_name):
+    valid_choices = ['y', 'n', 'Y', 'N']
+    query = f"Are you sure you want to delete the movie {movie_name}? (enter 'y' for Yes or 'n' for No)"
+
+    user_input = ui_service.get_input_valid_choice(valid_choices, query)
+
+    return True if user_input in ['y', 'Y'] else False

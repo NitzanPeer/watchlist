@@ -10,6 +10,8 @@ from .services.mysql_service import MySQLService
 from .services.movie_api.tmdb_api import TmdbAPI
 from .services.movie_api.omdb_api import OmdbAPI
 from .controllers import add_controller
+from .controllers import update_controller
+from .controllers import delete_controller
 
 from .models import *
 from .models import *
@@ -38,7 +40,9 @@ if __name__ == "__main__":
 
     try:
 
-        status = add_controller.add("Titanic")
+        status = add_controller.add("titanic")
+        # update = update_controller.update("titanic")
+        # delete = delete_controller.delete("titanic")
 
     except MovieError as e:
         print(e)

@@ -1,8 +1,5 @@
 from tabulate import tabulate
 
-#undeeded?
-def print_no_movies_found_error(movie_name):
-    print(f"No movie named {movie_name} was found.")
 
 # options = list of dicts/lists (like rows in table)
 # headers = list of strings
@@ -26,14 +23,7 @@ def print_options_table(headers, options):
 
     print(tabulate(table, headers='firstrow', tablefmt='fancy_grid'))
 
-
-# you can use map() to create a list of stringed ints
 def get_input_valid_choice(valid_choices, query):
-
-    # valid_choices will be produced somewhere else (controller?) as a list that will contain 'n','p' and
-    # a range of STRINGED INTS! (probably range(:total_page_results))
-    # that will be created using the built-in map() func
-    # validation will be handled there as well
 
     print(query)
 
@@ -50,10 +40,23 @@ def get_input_valid_choice(valid_choices, query):
 
     return user_choice
 
-
 def is_valid_choice(choice, valid_choices):
     return choice in valid_choices
 
 def print_add_movie_summary(movie_name):
     print(f"\nThe movie {movie_name} was added to the database.\n")
+
+def print_update_movie_summary(movie_name, binary_status):
+    print(binary_status)
+    status = '"Watched"' if binary_status else '"Not Watched"'
+    print(f"\nThe movie {movie_name}'s watch status was updated to {status}.\n")
+
+def print_delete_movie_summary(movie_name):
+    print(f"\nThe movie {movie_name} was deleted from the database.\n")
+
+def print_movie_was_not_deleted():
+    print(f"\nThe movie was not deleted.\n")
+
+
+
 
