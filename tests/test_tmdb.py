@@ -6,8 +6,8 @@ from watchlist.services.movie_api.tmdb_api import TmdbAPI
 
 class TestTMDBAPI(unittest.TestCase):
 
-    def assert_search_results(self, movie_name, page_num):
-        results = TmdbAPI.search(movie_name, page_num)
+    def assert_search_results(self, movie_title, page_num):
+        results = TmdbAPI.search(movie_title, page_num)
         self.assertIsInstance(results, list, "results should be a list")
         self.assertGreater(len(results), 0, "results should contain more than 0 elements")
         self.assertIsInstance(results[0], dict, "results element should be a dict")
@@ -22,14 +22,14 @@ class TestTMDBAPI(unittest.TestCase):
 
 
     def test_search_titanic(self):
-        movie_name = "Titanic"
+        movie_title = "Titanic"
         page_num = 1
-        self.assert_search_results(movie_name, page_num)
+        self.assert_search_results(movie_title, page_num)
 
     def test_search_the_matrix(self):
-        movie_name = "The Matrix"
+        movie_title = "The Matrix"
         page_num = 2
-        self.assert_search_results(movie_name, page_num)
+        self.assert_search_results(movie_title, page_num)
 
     def test_get_titanic_info(self):
         tmdb_id = 597

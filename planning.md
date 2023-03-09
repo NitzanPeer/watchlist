@@ -1,7 +1,7 @@
 # Features:
 ## add
 
-add (`movie-name`)
+add (`movie-title`)
 
 * searches for the movie in imdb
 	* shows interactive selection menu
@@ -9,7 +9,7 @@ add (`movie-name`)
 		* presents option to search deeper
 	* on user selection
 		* retrieves the following parameters
-			* movie name
+			* movie title
 			* director
 			* genres
 			* year
@@ -33,9 +33,9 @@ list (`watched | unwatched`)
 
 ## remove
 
-remove `movie name`
+remove `movie title`
 
-* searches the db for the `movie name`
+* searches the db for the `movie title`
 	* if no exact match
 		* show user selection of possible matches
 		* wait for user selection
@@ -49,9 +49,9 @@ remove `movie name`
 
 ## update
 
-update `movie name`
+update `movie title`
 
-* searches the db for the `movie name`
+* searches the db for the `movie title`
 	* if no exact match
 		* show user selection of possible matches
 		* wait for user selection
@@ -80,11 +80,11 @@ TMDB - https://api.themoviedb.org/3/movie/550?api_key=b5b1baac3d56cc9ee08b4e0174
 
 * querying the db for the movie
 	* if not exist:
-		* search api for the movie name, show the user the results
+		* search api for the movie title, show the user the results
 		* pagination
 
 		* go to the api and fetch:
-			* movie name
+			* movie title
 			* director
 			* genres
 			* year
@@ -112,12 +112,12 @@ TMDB - https://api.themoviedb.org/3/movie/550?api_key=b5b1baac3d56cc9ee08b4e0174
 
 ## Imagine app interaction and interface (UI)
 * cli: `python -m watchlist add the matrix`
-* (we take the movie name, we search it using api and return the results)
+* (we take the movie title, we search it using api and return the results)
 * terminal: if no movies found, print "no movies found" and quit.
-* terminal: print a list(a row each) of the movies results with a header. each row will contain movie's index in list, name, year.
-Example: 
+* terminal: print a list(a row each) of the movies results with a header. each row will contain movie's index in list, title, year.
+Example:
 	```
-		 	Name 					Year
+		 	title 					Year
 	1 		The Matrix 				1999
 	2 		The Matrix Reloaded 	2002
 	3 		The Matrix Revolution 	2005

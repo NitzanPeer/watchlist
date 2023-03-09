@@ -27,7 +27,7 @@ class Test_MYSQLSERVICE(unittest.TestCase):
     f"""
         CREATE TABLE IF NOT EXISTS {demo_table_name} (
             id INT NOT NULL AUTO_INCREMENT,
-            name VARCHAR(50) NOT NULL,
+            title VARCHAR(50) NOT NULL,
             director VARCHAR(50),
             genres VARCHAR(50),
             year YEAR,
@@ -39,7 +39,7 @@ class Test_MYSQLSERVICE(unittest.TestCase):
         );
     """
 
-    demo_columns = ['id', 'name']
+    demo_columns = ['id', 'title']
 
     demo_order_by_columns = [
         {
@@ -47,7 +47,7 @@ class Test_MYSQLSERVICE(unittest.TestCase):
             'order': 'DESC'
         },
         {
-            'column': 'name',
+            'column': 'title',
         }
     ]
 
@@ -58,7 +58,7 @@ class Test_MYSQLSERVICE(unittest.TestCase):
 
     demo_where = [
         {
-            'column': 'name',
+            'column': 'title',
             'operator': '=',
             'value': 'test1'
         },
@@ -72,7 +72,7 @@ class Test_MYSQLSERVICE(unittest.TestCase):
 
     demo_false_where = [
         {
-            'column': 'name',
+            'column': 'title',
             'operator': '=',
             'value': 'non_exist'
         }
@@ -87,14 +87,14 @@ class Test_MYSQLSERVICE(unittest.TestCase):
     ]
 
     demo_insert = {
-        'name': 'TEST',
+        'title': 'TEST',
         'year': 1998,
         'imdb_score': 79,
         'imdb_id': 200
     }
 
     demo_set = {
-        'name': 'TEST',
+        'title': 'TEST',
         'year': 1998,
         'imdb_score': 85,
         'imdb_id': 305
@@ -116,7 +116,7 @@ class Test_MYSQLSERVICE(unittest.TestCase):
     def setUp(self):
         self.mysql_service.raw_query(f"""
             INSERT INTO {self.demo_table_name}
-            (id, name, director, genres, year, description, imdb_id, imdb_score, rotten_tomatoes_score)
+            (id, title, director, genres, year, description, imdb_id, imdb_score, rotten_tomatoes_score)
             VALUES
             (1, 'test1', 'director_test1', 'genres_test1', 1981, 'description_test1', 1, 1.1, 11),
             (2, 'test2', 'director_test2', 'genres_test2', 1982, 'description_test2', 2, 2.2, 22),
@@ -230,7 +230,7 @@ class Test_MYSQLSERVICE(unittest.TestCase):
     def test_delete_no_rows(self):
         where = [
             {
-                'column': 'name',
+                'column': 'title',
                 'operator': '=',
                 'value': 'non_exist'
             }
@@ -245,16 +245,12 @@ class Test_MYSQLSERVICE(unittest.TestCase):
             where_data=self.demo_where,
             order_by_columns=[])
 
-        # do we need both NotNone AND IsInstance?
-        self.assertIsNotNone(select_result, "result should not be None")
         self.assertIsInstance(select_result, dict, "result should be a dict")
 
     def test_delete_all_rows(self):
         delete_result = self.mysql_service.delete(self.demo_table_name, self.demo_where_all_columns)
 
         self.assertEqual(delete_result, 3, "all rows should be deleted")
-        # do we need both NotNone AND IsInstance?
-        self.assertIsNotNone(delete_result, "result should be numeric")
         self.assertIsInstance(delete_result, int, "result should be numeric")
 
         select_result = self.mysql_service.select_all(

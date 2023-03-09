@@ -1,81 +1,23 @@
-from .. import models
 from ..services import ui_service
 
 
+def extract_title_and_year(options):
 
-# # add_controller
-# ################
+    extracted_data = []
+    for option in options:
+        extracted_data.append({
+            'title': option['title'],
+            'year': option['year'] if 'year' in option else option['release_date'][:4]
+        })
 
-# # repeats, move to util:
-# print_worthy_list = []
-# for result in page_results:
-#     print_worthy_list.append({'name': result['title'], 'year': result['release_date'][:4]})
+    return extracted_data
 
-# ui_service.print_options_table(["name", "year"], print_worthy_list)
+def where_condition_handling(column, operator, value):
 
-# # repeats, move to util:
-# int_list = list(range(1, len(page_results)+1))
-# valid_choices = list(map(lambda a : str(a), int_list))
-
-
-
-
-# # update_controller
-# ###################
-
-# # repeats, move to util:
-# print_worthy_list = []
-# for movie in movies_found:
-#     print_worthy_list.append({'name': movie['name'], 'year': movie['year']})
-
-# ui_service.print_options_table(["name", "year"], print_worthy_list)
-
-
-# # repeats, move to util:
-# int_list = list(range(1, len(movies_found)+1))
-# valid_choices = list(map(lambda a : str(a), int_list))
-# query = "Choose an option number:"
-
-# user_input = ui_service.get_input_valid_choice(valid_choices, query)
-
-# if user_input.isdecimal():
-
-#     movie_id = movies_found[int(user_input)-1]['id']
-
-# # repeats, move to util
-# valid_choices = ['y', 'n', 'Y', 'N']
-# query = "Is this the movie you were looking for? (enter 'y' for YES or 'n' for NO)"
-# user_input = ui_service.get_input_valid_choice(valid_choices, query)
-
-
-
-
-# # delete_controller
-# ###################
-
-
-# # repeats, move to util:
-# int_list = list(range(1, len(movies_found)+1))
-# valid_choices = list(map(lambda a : str(a), int_list))
-# query = "Choose an option number:"
-
-# user_input = ui_service.get_input_valid_choice(valid_choices, query)
-
-# if user_input.isdecimal():
-
-#     movie_id = movies_found[int(user_input)-1]['id']
-
-
-
-
-# # repeats, move to util
-# valid_choices = ['y', 'n', 'Y', 'N']
-# query = "Is this the movie you were looking for? (enter 'y' or 'n')"
-# user_input = ui_service.get_input_valid_choice(valid_choices, query)
-
-
-# if user_input in ['y', 'Y']:
-#     movie_id = movies_found[0]['id']
-
-# else:
-#     raise exceptions.NoMoviesFoundError(f"No movies were found.")
+    return [
+        {
+            'column': column,
+            'operator': operator,
+            'value': value
+        }
+    ]

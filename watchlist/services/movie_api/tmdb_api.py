@@ -43,21 +43,15 @@ class TmdbAPI:
 
 
     @staticmethod
-    def search(movie_name, page_num):
+    def search(movie_title, page_num):
         # https://api.themoviedb.org/3/search/movie?api_key=b5b1baac3d56cc9ee08b4e017486795d&language=en-US&query=Titanic&page=1&include_adult=false
 
-        # finding the tmdb_id (user picked):
-
-        encoded_name = urllib.parse.quote(movie_name)
+        encoded_name = urllib.parse.quote(movie_title)
         specific_api = f"{TmdbAPI.base_url}search/movie?api_key={TmdbAPI.api_key}&language=en-US&query={encoded_name}&page={page_num}&include_adult=false"
         response = requests.get(specific_api)
         response_json = response.json()
 
         return response_json
-
-        # all_results_in_page = response_json["results"]
-        # return all_results_in_page
-
 
 
 

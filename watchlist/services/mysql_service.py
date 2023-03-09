@@ -149,15 +149,7 @@ class MySQLService:
     def __dict_to_key_list(self, dictionary):
         return ', '.join(list(dictionary.keys()))
 
-    # TODO: fix null treated as a string (prob lies in the return making the entire thing a str, need to change the method from slicing to something else)
     def __dict_to_value_list(self, dictionary):
-
-        # test prints:
-        # print("dict:")
-        # print(dictionary)
-        # print("genres:")
-        # print(dictionary['genres'])
-        # print(type(dictionary['genres']))
 
         new_list = []
 
@@ -165,16 +157,8 @@ class MySQLService:
 
             converted_value = self.__convert_python_value_to_sql(dictionary[key])
             new_list.append(converted_value)
-        # test print:
-        # print(f"before - {new_list}")
-        # print(f"after - {str(', '.join(new_list))}")
-        # print(f"type - {type(str(', '.join(new_list)))}")
-        # print(f"slicing - {str(new_list)[1:-1]}")
 
         return str(', '.join(new_list))
-        # if len(new_list) > 1 else
-        # return str(new_list)[1:-1]
-
 
     def __convert_python_value_to_sql(self, item_to_convert):
 
@@ -193,7 +177,6 @@ class MySQLService:
 
 
         return item_to_convert
-
 
     def __set_clause_handling(self, set_data):
 

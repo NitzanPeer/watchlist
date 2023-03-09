@@ -31,14 +31,14 @@ def handle_cli_args_example():
     # sys.argv[1:]  ?
     cli_arguments = sys.argv
     action = cli_arguments[1]
-    movie_name = cli_arguments[2]
+    movie_title = cli_arguments[2]
     if len(sys.argv) > 3:
         watch_status = cli_arguments[3]
 
 if __name__ == "__main__":
 
-    # TODO: clean code from comments and prints
-    # TODO: migrate/convert all movie "name" to movie "title" - this includes variables like movie_name
+    # TODO: clean code from comments and prints (DONE (except stuff I still need))
+    # TODO: migrate/convert all movie "name" to movie "title" - this includes variables like movie_name (DONE)
     # TODO: create a new flow/controller for display
 
 
@@ -46,10 +46,14 @@ if __name__ == "__main__":
 
         # status = add_controller.add("titanic")
         update = update_controller.update("titanic")
-        # delete = delete_controller.delete("titanic")
+        delete = delete_controller.delete("titanic")
 
     except MovieError as e:
         print(e)
         # print(dir(e))
         # print(vars(e))
 
+
+
+# DONE:
+# fixed __find_movie_by_column

@@ -12,7 +12,7 @@ table_name = "movies"
 
 demo_key_value_data = \
     {
-        'name': 'Titanic',
+        'title': 'Titanic',
         'year': 1998,
         'imdb_score': 79,
         'imdb_id': 200,
@@ -45,11 +45,11 @@ demo_order_by_columns = \
             'order': 'DESC'
         },
         {
-            'column': 'name',
+            'column': 'title',
         }
     ]
 
-demo_columns = ['id', 'name']
+demo_columns = ['id', 'title']
 
 
 page_results = [
@@ -96,17 +96,17 @@ options = \
     [
         {
             'index': '1',
-            'name': 'Titanic',
+            'title': 'Titanic',
             'year': '1997'
         },
         {
             'index': '2',
-            'name': 'Titanic',
+            'title': 'Titanic',
             'year': '1943'
         }
     ]
 
-headers = ['', 'Name', 'Year']
+headers = ['', 'title', 'Year']
 
 
 # print_options_table(headers, options)

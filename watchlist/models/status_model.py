@@ -1,3 +1,4 @@
+from ..services import util
 from ..services.mysql_service import MySQLService
 from ..services import exceptions
 
@@ -14,16 +15,6 @@ f"""
 
 mysql_service = MySQLService()
 
-def where_condition_handling(column, operator, value):
-
-    return [
-        {
-            'column': column,
-            'operator': operator,
-            'value': value
-        }
-    ]
-
 def add_watch_status(movie_id, watch_status):
 
     movie_data = {
@@ -36,7 +27,7 @@ def add_watch_status(movie_id, watch_status):
 
 def delete_watch_status_by_movie_id(movie_id):
 
-    where_condition = where_condition_handling("movie_id", "=", movie_id)
+    where_condition = util.where_condition_handling("movie_id", "=", movie_id)
 
     result = mysql_service.delete(table_name, where_condition)
     return result
@@ -49,7 +40,7 @@ def update_watch_status(movie_id, watch_status):
 
     set_data = {'watch_status': int(watch_status)}
 
-    where_condition = where_condition_handling("movie_id", "=", movie_id)
+    where_condition = util.where_condition_handling("movie_id", "=", movie_id)
 
     result = mysql_service.update(table_name, set_data, where_condition)
     return result
@@ -62,17 +53,16 @@ def mark_as_unwatched(movie_id):
 
 def get_watch_status_by_movie_id(movie_id):
 
-    where_condition = where_condition_handling("movie_id", "=", movie_id)
+    where_condition = util.where_condition_handling("movie_id", "=", movie_id)
 
     columns = ['watch_status']
 
-    #TODO: test print:
+    #TODO: test prints:
 
     print(f"RESULT ==== {table_name, columns, where_condition}")
 
     result = mysql_service.select_one(table_name, columns, where_data = where_condition)
 
-    #TODO: test print:
     print(f"RESULT ==== {result}")
 
 
