@@ -24,18 +24,6 @@ def print_options_table(headers, options):
 
     print(tabulate(table, headers='firstrow', tablefmt='fancy_grid'))
 
-
-
-
-
-
-
-
-
-
-
-
-
 def get_valid_chosen_option_from_options(options, query, extra_choices=[]):
 
     valid_choices = list(map(lambda a : str(a), range(1, len(options)+1)))
@@ -43,19 +31,6 @@ def get_valid_chosen_option_from_options(options, query, extra_choices=[]):
     user_input = get_input_valid_choice(valid_choices, query)
 
     return options[int(user_input)-1] if user_input.isdecimal() else user_input
-
-
-dict
-
-
-
-
-
-
-
-
-
-
 
 def get_input_valid_choice(valid_choices, query):
 

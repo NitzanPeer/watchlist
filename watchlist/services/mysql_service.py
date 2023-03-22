@@ -197,18 +197,32 @@ class MySQLService:
 
         where_clause = ""
 
-        for dictionary in where_data:
+        if where_data and isinstance(where_data[0], dict):
+            where_data = [where_data]
 
-            column = f"{dictionary['column']} "
-            operator = f"{dictionary['operator']} "
+        for list_of_dicts in where_data:
 
-            if isinstance(dictionary['value'], str):
-                value = f"'{dictionary['value']}'"
-            else:
-                value = self.__convert_python_value_to_sql(dictionary['value'])
-                value = f"{value}"
+            where_clause += "("
 
-            where_clause += column + operator + value
+            for dictionary in list_of_dicts:
+
+                column = f"{dictionary['column']} "
+                operator = f"{dictionary['operator']} "
+
+                if isinstance(dictionary['value'], str):
+                    value = f"'{dictionary['value']}'"
+                else:
+                    value = self.__convert_python_value_to_sql(dictionary['value'])
+                    value = f"{value}"
+
+                where_clause += column + operator + value
+
+                where_clause += " OR "
+
+
+            where_clause = where_clause[:-4]
+            where_clause += ")"
             where_clause += " AND "
+
 
         return f"WHERE {where_clause[:-5]}"

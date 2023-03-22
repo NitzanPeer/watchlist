@@ -1,4 +1,4 @@
-# python -m watchlist (from projects/watchlist)
+# python -m watchlist (from projects/Python/watchlist)
 
 import sys
 import mysql.connector
@@ -12,9 +12,10 @@ from .services.movie_api.omdb_api import OmdbAPI
 from .controllers import add_controller
 from .controllers import update_controller
 from .controllers import delete_controller
+from .controllers import display_controller
 
 from .models import *
-from .models import *
+
 
 def verify_valid_command(cli_arguments):
     valid_commands = ["add", "remove", "update", "show"]
@@ -35,16 +36,60 @@ def handle_cli_args_example():
     if len(sys.argv) > 3:
         watch_status = cli_arguments[3]
 
+
+print(__name__)
+
 if __name__ == "__main__":
 
-    # TODO: clean code from comments and prints (DONE (except stuff I still need))
-    # TODO: migrate/convert all movie "name" to movie "title" - this includes variables like movie_name (DONE)
+
     # TODO: create a new flow/controller for display
+
+    print("main")
 
 
     try:
+        where_data = [
+            {
+                'column': 'title',
+                'operator': '=',
+                'value': 'the matrix'
+            },
+            {
+                'column': 'title',
+                'operator': '=',
+                'value': 'titanic'
+            },
+            {
+                'column': 'title',
+                'operator': '=',
+                'value': 'the matrix'
+            },
+            {
+                'column': 'title',
+                'operator': '=',
+                'value': 'titanic'
+            },
+            {
+                'column': 'year',
+                'operator': '=>',
+                'value': 1998
+            }
+        ]
 
-        # status = add_controller.add("titanic")
+
+        print("main")
+
+        display = display_controller.display(director=["Ben Stiller", "Clint Eastwood"], genre=['thriller', 'action'])
+
+
+        quit()
+
+        mysql_service = MySQLService()
+        asds = mysql_service.__where_clause_handling(where_data)
+        print(asds)
+
+
+        status = add_controller.add("titanic")
         update = update_controller.update("titanic")
         delete = delete_controller.delete("titanic")
 
@@ -55,5 +100,32 @@ if __name__ == "__main__":
 
 
 
-# DONE:
-# fixed __find_movie_by_column
+
+
+
+# TODO: __find_movie_by_column should enable using LIKE as an operator
+# TODO: find_movies_by_title should wrap the title in a LIKE wildcard (%)
+# TODO: create a mysql method that can get filters and build a where clause from them
+    # filter structure:
+        # [
+        #     {
+        #         'column': 'director',
+        #         'operator': 'LIKE',
+        #         'values': ["Ben Stiller", "Clint Eastwood"]
+        #     },
+        #     {
+        #         'column': 'title',
+        #         'operator': 'LIKE',
+        #         'values': ["matrix", "matrix2"]
+        #     },
+        #     {
+        #         'column': 'year',
+        #         'operator': '>=',
+        #         'values': 1998
+        #     },
+        #     {
+        #         'column': 'imdb_id',
+        #         'operator': '=',
+        #         'values': ['tt435', 'tt21346']
+        #     }
+        # ]

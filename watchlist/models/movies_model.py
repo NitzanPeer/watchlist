@@ -30,7 +30,7 @@ f"""
 
 mysql_service = MySQLService()
 
-def __find_movie_by_column(column_name, column_value, columns=[], one_result = False):
+def __find_movie_by_column(column_name, column_value, columns=[], one_result = False, is_operator_equal=True):
 
     where_condition = util.where_condition_handling(column_name, "=", column_value)
 
@@ -61,7 +61,41 @@ def find_all_movies(columns=[], filters=[]):
 
     # TODO: convert filters into valid where clause
 
-    all_movies = mysql_service.select_all(table_name, columns)
+
+    # filters = list of lists?
+    # [[matrix, titanic], [action, drama], [year]]
+
+    # filters = list of dicts?
+    # [
+    #   {
+    #       "movie_title":
+    #   }
+    # ]
+
+    # where_data = []
+
+    # for list_of_filters in filters:
+    #     for item in list_of_filters:
+    #         {
+    #             'column': 'title',
+    #             'operator': '=',
+    #             'value': 'matrix'
+    #         },
+    #         {
+    #             'column': 'title',
+    #             'operator': '=',
+    #             'value': 'titanic'
+    #         },
+    #         {
+    #             'column': 'year',
+    #             'operator': '>',
+    #             'value': 1998
+    #         }
+
+
+
+
+    all_movies = mysql_service.select_all(table_name, columns, where_data=None, order_by_columns=[], limit={})
     return all_movies
 
 def find_movie_by_id(movie_id, columns=[]):

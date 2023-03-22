@@ -1,112 +1,119 @@
-# $ python -m unittest tests/mini_tests.py -v
+# $ python -m unittest tests/mini_tests -v
 
 import requests
 from watchlist.services.mysql_service import MySQLService
 import mysql.connector
 from watchlist.services.ui_service import print_options_table, print_no_movies_found_error, print_add_movie_summary, get_input_valid_choice
 
+from __convert_python_value_to_sql import *
+
 mysql_service = MySQLService()
 
 table_name = "movies"
 
 
-demo_key_value_data = \
-    {
-        'title': 'Titanic',
-        'year': 1998,
-        'imdb_score': 79,
-        'imdb_id': 200,
-    }
 
-demo_where_data = \
-    [
-        {
-            'column': 'year',
-            'operator': '>',
-            'value': 1998
-        },
-        {
-            'column': 'imdb_score',
-            'operator': '>=',
-            'value': 70
-        }
-    ]
+# demo_key_value_data = \
+#     {
+#         'title': 'Titanic',
+#         'year': 1998,
+#         'imdb_score': 79,
+#         'imdb_id': 200,
+#     }
 
-demo_limit = \
-    {
-        'offset': 1,
-        'count': 2
-    }
+# demo_where_data = \
+#     [
+#         {
+#             'column': 'year',
+#             'operator': '>',
+#             'value': 1998
+#         },
+#         {
+#             'column': 'imdb_score',
+#             'operator': '>=',
+#             'value': 70
+#         }
+#     ]
 
-demo_order_by_columns = \
-    [
-        {
-            'column': 'id',
-            'order': 'DESC'
-        },
-        {
-            'column': 'title',
-        }
-    ]
+# demo_limit = \
+#     {
+#         'offset': 1,
+#         'count': 2
+#     }
 
-demo_columns = ['id', 'title']
+# demo_order_by_columns = \
+#     [
+#         {
+#             'column': 'id',
+#             'order': 'DESC'
+#         },
+#         {
+#             'column': 'title',
+#         }
+#     ]
 
-
-page_results = [
-    {
-      "backdrop_path": "/rzdPqYx7Um4FUZeD8wpXqjAUcEm.jpg",
-      "genre_ids": [
-        18,
-        10749
-      ],
-      "id": 597,
-      "original_language": "en",
-      "original_title": "Titanic",
-      "overview": "101-year-old Rose DeWitt Bukater tells the story of her life aboard the Titanic, 84 years later. A young Rose boards the ship with her mother and fiancé. Meanwhile, Jack Dawson and Fabrizio De Rossi win third-class tickets aboard the ship. Rose tells the whole story from Titanic's departure through to its death—on its first and last voyage—on April 15, 1912.",
-      "popularity": 319.114,
-      "poster_path": "/9xjZS2rlVxm8SFx8kPC3aIGCOYQ.jpg",
-      "release_date": "1997-11-18",
-      "title": "Titanic",
-      "vote_average": 7.888,
-      "vote_count": 22350
-    },
-    {
-      "backdrop_path": "/edHgXEtPbyVIQ7xKb1cvJJqTVhA.jpg",
-      "genre_ids": [
-        28,
-        18,
-        36
-      ],
-      "id": 11021,
-      "original_language": "de",
-      "original_title": "Titanic",
-      "overview": "This little-known German film retells the true story of the British ocean liner that met a tragic fate. Ernst Fritz Fürbringer plays the president of the White Star Line, who unwisely pressed the Titanic's captain (Otto Wernicke) to make the swiftest possible crossing to New York.",
-      "popularity": 21.797,
-      "poster_path": "/Al7oIXQ4dZAofBTZWm6OiXS3MEa.jpg",
-      "release_date": "1943-11-10",
-      "title": "Titanic",
-      "vote_average": 6.1,
-      "vote_count": 51
-    }
-]
+# demo_columns = ['id', 'title']
 
 
+# page_results = [
+#     {
+#       "backdrop_path": "/rzdPqYx7Um4FUZeD8wpXqjAUcEm.jpg",
+#       "genre_ids": [
+#         18,
+#         10749
+#       ],
+#       "id": 597,
+#       "original_language": "en",
+#       "original_title": "Titanic",
+#       "overview": "101-year-old Rose DeWitt Bukater tells the story of her life aboard the Titanic, 84 years later. A young Rose boards the ship with her mother and fiancé. Meanwhile, Jack Dawson and Fabrizio De Rossi win third-class tickets aboard the ship. Rose tells the whole story from Titanic's departure through to its death—on its first and last voyage—on April 15, 1912.",
+#       "popularity": 319.114,
+#       "poster_path": "/9xjZS2rlVxm8SFx8kPC3aIGCOYQ.jpg",
+#       "release_date": "1997-11-18",
+#       "title": "Titanic",
+#       "vote_average": 7.888,
+#       "vote_count": 22350
+#     },
+#     {
+#       "backdrop_path": "/edHgXEtPbyVIQ7xKb1cvJJqTVhA.jpg",
+#       "genre_ids": [
+#         28,
+#         18,
+#         36
+#       ],
+#       "id": 11021,
+#       "original_language": "de",
+#       "original_title": "Titanic",
+#       "overview": "This little-known German film retells the true story of the British ocean liner that met a tragic fate. Ernst Fritz Fürbringer plays the president of the White Star Line, who unwisely pressed the Titanic's captain (Otto Wernicke) to make the swiftest possible crossing to New York.",
+#       "popularity": 21.797,
+#       "poster_path": "/Al7oIXQ4dZAofBTZWm6OiXS3MEa.jpg",
+#       "release_date": "1943-11-10",
+#       "title": "Titanic",
+#       "vote_average": 6.1,
+#       "vote_count": 51
+#     }
+# ]
 
-options = \
-    [
-        {
-            'index': '1',
-            'title': 'Titanic',
-            'year': '1997'
-        },
-        {
-            'index': '2',
-            'title': 'Titanic',
-            'year': '1943'
-        }
-    ]
 
-headers = ['', 'title', 'Year']
+
+# options = \
+#     [
+#         {
+#             'index': '1',
+#             'title': 'Titanic',
+#             'year': '1997'
+#         },
+#         {
+#             'index': '2',
+#             'title': 'Titanic',
+#             'year': '1943'
+#         }
+#     ]
+
+# headers = ['', 'title', 'Year']
+
+
+
+
 
 
 # print_options_table(headers, options)
