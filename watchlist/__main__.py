@@ -37,57 +37,17 @@ def handle_cli_args_example():
         watch_status = cli_arguments[3]
 
 
-print(__name__)
 
 if __name__ == "__main__":
 
 
     # TODO: create a new flow/controller for display
 
-    print("main")
-
 
     try:
-        where_data = [
-            {
-                'column': 'title',
-                'operator': '=',
-                'value': 'the matrix'
-            },
-            {
-                'column': 'title',
-                'operator': '=',
-                'value': 'titanic'
-            },
-            {
-                'column': 'title',
-                'operator': '=',
-                'value': 'the matrix'
-            },
-            {
-                'column': 'title',
-                'operator': '=',
-                'value': 'titanic'
-            },
-            {
-                'column': 'year',
-                'operator': '=>',
-                'value': 1998
-            }
-        ]
 
-
-        print("main")
-
-        display = display_controller.display(director=["Ben Stiller", "Clint Eastwood"], genre=['thriller', 'action'])
-
-
+        display = display_controller.display(directors=["Ben Stiller", "Clint Eastwood"], genres=['thriller'], imdb_ids = ["23423", "256334"], imdb_rating=80, rt_rating=85)
         quit()
-
-        mysql_service = MySQLService()
-        asds = mysql_service.__where_clause_handling(where_data)
-        print(asds)
-
 
         status = add_controller.add("titanic")
         update = update_controller.update("titanic")
@@ -98,34 +58,3 @@ if __name__ == "__main__":
         # print(dir(e))
         # print(vars(e))
 
-
-
-
-
-
-# TODO: __find_movie_by_column should enable using LIKE as an operator
-# TODO: find_movies_by_title should wrap the title in a LIKE wildcard (%)
-# TODO: create a mysql method that can get filters and build a where clause from them
-    # filter structure:
-        # [
-        #     {
-        #         'column': 'director',
-        #         'operator': 'LIKE',
-        #         'values': ["Ben Stiller", "Clint Eastwood"]
-        #     },
-        #     {
-        #         'column': 'title',
-        #         'operator': 'LIKE',
-        #         'values': ["matrix", "matrix2"]
-        #     },
-        #     {
-        #         'column': 'year',
-        #         'operator': '>=',
-        #         'values': 1998
-        #     },
-        #     {
-        #         'column': 'imdb_id',
-        #         'operator': '=',
-        #         'values': ['tt435', 'tt21346']
-        #     }
-        # ]

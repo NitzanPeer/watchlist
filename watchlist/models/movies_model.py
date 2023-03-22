@@ -30,9 +30,12 @@ f"""
 
 mysql_service = MySQLService()
 
-def __find_movie_by_column(column_name, column_value, columns=[], one_result = False, is_operator_equal=True):
+def __find_movie_by_column(column_name, column_value, columns=[], one_result = False, operator="="):
 
-    where_condition = util.where_condition_handling(column_name, "=", column_value)
+    where_condition = util.where_condition_handling(column_name, operator, column_value)
+
+    if operator == "like":
+        operator = f"%{operator}%"
 
     if one_result:
         result = mysql_service.select_one(table_name, columns, where_data=where_condition)

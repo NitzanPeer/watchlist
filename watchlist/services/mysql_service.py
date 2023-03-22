@@ -197,6 +197,9 @@ class MySQLService:
 
         where_clause = ""
 
+        if not where_data:
+            return where_clause
+
         if where_data and isinstance(where_data[0], dict):
             where_data = [where_data]
 
