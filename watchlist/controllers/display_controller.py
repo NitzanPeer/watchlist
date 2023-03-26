@@ -26,37 +26,29 @@ def display(
         "movie_titles": {"column": "title", "operator": "like"},
         "directors": {"column": "director", "operator": "like"},
         "genres": {"column": "genres", "operator": "like"},
-        "imdb_ids": {"column": "imdb_ids", "operator": "equals"},
+        "imdb_ids": {"column": "imdb_id", "operator": "equals"},
         "year": {"column": "year", "operator": "gte"},
         "imdb_rating": {"column": "imdb_score", "operator": "gte"},
         "rt_rating": {"column": "rotten_tomatoes_score", "operator": "gte"},
         "watched": {"column": "watch_status", "operator": "equals"}
     }
 
-    filters = []
-    for key, value in args:
-        if value:
-            filters.extend(util.where_condition_looping(value, where_config[key]["column"], where_config[key]["operator"]))
-        # fix for falsy watched:
-        if value == False:
-            filters.extend(util.where_condition_looping(value, where_config[key]["column"], where_config[key]["operator"]))
-
-
-    search_results = models.find_all_movies(filters=filters)
+    search_results = models.find_all_movies_join_watch_status(where_config, args)
 
     print(f"search_results = {search_results}\n")
 
 
     # TABULATE:
     # with the id column:
-    # ui_service.print_options_table(["id", "title", "director", "genres", "year", "description", "imdb id", "imdb score", "rt score"], search_results)
+    # ui_service.print_options_table(["id", "title", "director", "genres", "year", "description", "imdb id", "imdb score", "rt score", "watched"], search_results)
 
     # without the id column:
 
-    # for result in search_results:
-    #      del result["id"]
+    for result in search_results:
+         del result["id"]
+         del result["description"]
 
-    # ui_service.print_options_table(["title", "director", "genres", "year", "description", "imdb id", "imdb score", "rt score"], search_results)
+    ui_service.print_options_table(["title", "director", "genres", "year", "imdb id", "imdb score", "rt score", "watched"], search_results)
 
 
 

@@ -29,10 +29,10 @@ mysql_service = MySQLService()
 
 def __find_movie_by_column(column_name, column_value, columns=[], one_result = False, operator="="):
 
-    where_condition = util.where_condition_handling(column_name, operator, column_value)
-
     if operator == "like":
-        operator = f"%{operator}%"
+        column_value = f"%{column_value}%"
+
+    where_condition = MySQLService.create_where_data(column_name, operator, column_value)
 
     if one_result:
         result = mysql_service.select_one(table_name, columns, where_data=where_condition)
@@ -57,15 +57,25 @@ def add_movie(title, year, director, genres, imdb_id, imdb_score, rotten_tomatoe
 
     return mysql_service.insert(table_name, movie_info)
 
-def find_all_movies(columns=[], filters=[]):
+def find_all_movies_join_watch_status(where_config={}, args=[]):
 
-    # TODO: convert filters into valid where clause (already done outside? in display_controller?)
+    where_data = []
+    for key, value in args:
+        if value or isinstance(value, bool):
+            where_data.extend(MySQLService.create_multiple_where_data(value, where_config[key]["column"], where_config[key]["operator"]))
 
-    # doesn't look like the best solution but what's the alternative?
-    where_data = filters if filters else None
+    join_data = {
+        "target_table": "watch_status",
+        "source_column": "id",
+        "target_column": "movie_id"
+     }
 
-    results = mysql_service.select_all(table_name, columns, where_data, order_by_columns=[], limit={})
-    return results
+    columns = [
+        "movies.*", "watch_status.watch_status"
+    ]
+
+    return mysql_service.select_all(table_name, columns, join_data=join_data, where_data=where_data, order_by_columns=[], limit={})
+
 
 def find_movie_by_id(movie_id, columns=[]):
 
@@ -77,11 +87,11 @@ def find_movie_by_imdb_id(imdb_id, columns=[]):
 
 def find_movies_by_title(movie_title, columns=[]):
 
-    return __find_movie_by_column('title', movie_title, columns)
+    return __find_movie_by_column('title', movie_title, columns, operator="like")
 
 def delete_movie_by_id(id):
 
-    where_condition = util.where_condition_handling("id", "=", id)
+    where_condition = MySQLService.create_where_data("id", "=", id)
 
     result = mysql_service.delete(table_name, where_condition)
     return result
@@ -99,7 +109,7 @@ def update_movie_scores_by_id(id, imdb_score=None, rotten_tomatoes_score=None):
     if not set_data:
         return False
 
-    where_condition = util.where_condition_handling("id", "=", id)
+    where_condition = MySQLService.create_where_data("id", "=", id)
 
     result = mysql_service.update(table_name, set_data, where_condition)
     return result

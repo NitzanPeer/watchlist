@@ -44,12 +44,12 @@ class MySQLService:
         self.cursor.close()
         self.connection.close()
 
-    def select_one(self, table_name, columns=[], where_data=None, order_by_columns=[]):
-        self.__raw_select(table_name, columns, where_data, order_by_columns, {'count': 1})
+    def select_one(self, table_name, columns=[], join_data={}, where_data=[], order_by_columns=[]):
+        self.__raw_select(table_name, columns, join_data, where_data, order_by_columns, {'count': 1})
         return self.cursor.fetchone()
 
-    def select_all(self, table_name, columns=[], where_data=None, order_by_columns=[], limit={}):
-        self.__raw_select(table_name, columns, where_data, order_by_columns, limit)
+    def select_all(self, table_name, columns=[], join_data={}, where_data=[], order_by_columns=[], limit={}):
+        self.__raw_select(table_name, columns, join_data, where_data, order_by_columns, limit)
         return self.cursor.fetchall()
 
     def insert(self, table_name, insert_data):
@@ -105,7 +105,7 @@ class MySQLService:
         if is_commit:
             self.connection.commit()
 
-    def __raw_select(self, table_name, columns=[], where_data=None, order_by_columns=[], limit={}):
+    def __raw_select(self, table_name, columns=[], join_data={}, where_data=[], order_by_columns=[], limit={}):
 
         #TODO: test print:
         print(f"\nwhere_data = {where_data}\n")
@@ -114,13 +114,9 @@ class MySQLService:
 
         query = f"SELECT {columns_as_string} FROM {table_name}"
 
-        #TODO: make this an actual flag (argument):
-        watched_flag = True
-
-        if watched_flag:
-
-            query = f"SELECT movies.*, watch_status.watch_status FROM movies JOIN watch_status ON movies.id = watch_status.movie_id"
-
+        if join_data:
+            query += " "
+            query += self.__join_clause_handling(table_name, join_data)
 
         if where_data:
             query += " "
@@ -203,6 +199,9 @@ class MySQLService:
 
         return set_clause[:-2] if set_clause else set_clause
 
+    def __join_clause_handling(self, source_table, join_data):
+        return f"JOIN {join_data['target_table']} ON {source_table}.{join_data['source_column']} = {join_data['target_table']}.{join_data['target_column']}"
+
     def __where_clause_handling(self, where_data):
 
         where_clause = ""
@@ -239,3 +238,34 @@ class MySQLService:
 
 
         return f"WHERE {where_clause[:-5]}"
+
+    @staticmethod
+    def create_where_data(column, operator, value):
+
+        return [
+            {
+                'column': column,
+                'operator': operator,
+                'value': value
+            }
+        ]
+
+    @staticmethod
+    def create_multiple_where_data(list_of_items, name_of_column, operator_type):
+        result_clause = []
+
+        if not isinstance(list_of_items, list):
+            list_of_items = [list_of_items]
+
+        for item in list_of_items:
+            if operator_type == "like":
+                operator = "LIKE"
+                item = f"%{item}%"
+            elif operator_type == "equals":
+                operator = "="
+            elif operator_type == "gte":
+                operator = ">="
+
+            result_clause.extend(MySQLService.create_where_data(name_of_column, operator, item))
+
+        return [result_clause] if result_clause else []

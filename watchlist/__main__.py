@@ -47,8 +47,10 @@ if __name__ == "__main__":
     try:
 
         # display = display_controller.display(directors=["Ben Stiller", "Clint Eastwood"], genres=['thriller'], imdb_ids = ["123", "1234"], imdb_rating=80, rt_rating=85)
-        display = display_controller.display(movie_titles="Titanic", watched=False)
+        # display = display_controller.display(movie_titles="Titanic", watched=False)
         # display = display_controller.display(directors=[], genres=[], imdb_ids = [], imdb_rating=[], rt_rating=[])
+
+        update = update_controller.update("titan")
         quit()
 
         status = add_controller.add("titanic")

@@ -27,7 +27,7 @@ def add_watch_status(movie_id, watch_status):
 
 def delete_watch_status_by_movie_id(movie_id):
 
-    where_condition = util.where_condition_handling("movie_id", "=", movie_id)
+    where_condition = MySQLService.create_where_data("movie_id", "=", movie_id)
 
     result = mysql_service.delete(table_name, where_condition)
     return result
@@ -40,7 +40,7 @@ def update_watch_status(movie_id, watch_status):
 
     set_data = {'watch_status': int(watch_status)}
 
-    where_condition = util.where_condition_handling("movie_id", "=", movie_id)
+    where_condition = MySQLService.create_where_data("movie_id", "=", movie_id)
 
     result = mysql_service.update(table_name, set_data, where_condition)
     return result
@@ -53,7 +53,7 @@ def mark_as_unwatched(movie_id):
 
 def get_watch_status_by_movie_id(movie_id):
 
-    where_condition = util.where_condition_handling("movie_id", "=", movie_id)
+    where_condition = MySQLService.create_where_data("movie_id", "=", movie_id)
 
     columns = ['watch_status']
 

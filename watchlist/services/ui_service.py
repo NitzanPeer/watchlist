@@ -22,7 +22,8 @@ def print_options_table(headers, options):
 
         table.append(row)
 
-    print(tabulate(table, headers='firstrow', tablefmt='fancy_grid'))
+
+    print(tabulate(table, headers='firstrow', tablefmt='fancy_grid', maxcolwidths=15, numalign="left", stralign="left" ))
 
 def get_valid_chosen_option_from_options(options, query, extra_choices=[]):
 
