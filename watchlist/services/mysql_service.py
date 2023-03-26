@@ -101,18 +101,25 @@ class MySQLService:
         return bool(result)
 
     def raw_query(self, query, is_commit=True):
-        #TODO: test prints:
-        print(query)
-        print("=========")
         self.cursor.execute(query)
         if is_commit:
             self.connection.commit()
 
     def __raw_select(self, table_name, columns=[], where_data=None, order_by_columns=[], limit={}):
 
+        #TODO: test print:
+        print(f"\nwhere_data = {where_data}\n")
+
         columns_as_string = ", ".join(columns) if columns else '*'
 
         query = f"SELECT {columns_as_string} FROM {table_name}"
+
+        #TODO: make this an actual flag (argument):
+        watched_flag = True
+
+        if watched_flag:
+
+            query = f"SELECT movies.*, watch_status.watch_status FROM movies JOIN watch_status ON movies.id = watch_status.movie_id"
 
 
         if where_data:
@@ -143,6 +150,9 @@ class MySQLService:
             query += f" {limit_clause}"
 
         query += ";"
+
+        #TODO: test print:
+        print(f"query = {query}\n")
 
         self.raw_query(query, False)
 

@@ -46,7 +46,9 @@ if __name__ == "__main__":
 
     try:
 
-        display = display_controller.display(directors=["Ben Stiller", "Clint Eastwood"], genres=['thriller'], imdb_ids = ["23423", "256334"], imdb_rating=80, rt_rating=85)
+        # display = display_controller.display(directors=["Ben Stiller", "Clint Eastwood"], genres=['thriller'], imdb_ids = ["123", "1234"], imdb_rating=80, rt_rating=85)
+        display = display_controller.display(movie_titles="Titanic", watched=False)
+        # display = display_controller.display(directors=[], genres=[], imdb_ids = [], imdb_rating=[], rt_rating=[])
         quit()
 
         status = add_controller.add("titanic")
@@ -57,4 +59,13 @@ if __name__ == "__main__":
         print(e)
         # print(dir(e))
         # print(vars(e))
+
+
+# DONE:
+# imdb_ids switched to imdb_id in where_condition_looping in util
+# changes for "watched" to be included:
+#   changes in __raw_select in mysql_service, flag added (need to make watched_flag an argument)
+#   change to the configuartion
+#   change to filters
+# print to user using tabualte (janky because of long description)
 

@@ -28,6 +28,9 @@ def where_condition_looping(list_of_items, name_of_column, operator_type):
     if not isinstance(list_of_items, list):
         list_of_items = [list_of_items]
 
+    if name_of_column == "imdb_ids":
+        name_of_column = "imdb_id"
+
     for item in list_of_items:
         if operator_type == "like":
             operator = "LIKE"
@@ -37,6 +40,7 @@ def where_condition_looping(list_of_items, name_of_column, operator_type):
         elif operator_type == "gte":
             operator = ">="
 
+    
 
         result_clause.extend(where_condition_handling(name_of_column, operator, item))
 

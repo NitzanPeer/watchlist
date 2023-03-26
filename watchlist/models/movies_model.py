@@ -3,9 +3,6 @@ from ..services.mysql_service import MySQLService
 from typing import Any
 
 
-# in the controller we use the tmdb search method to present the user with options
-# user chooses an options and we get the tmdb_id of it which will fuel the funcs:
-
 # table = 'movies'
 # tmdb_id = 69
 # tmdb_json = TmdbAPI.get(tmdb_id)
@@ -62,44 +59,13 @@ def add_movie(title, year, director, genres, imdb_id, imdb_score, rotten_tomatoe
 
 def find_all_movies(columns=[], filters=[]):
 
-    # TODO: convert filters into valid where clause
+    # TODO: convert filters into valid where clause (already done outside? in display_controller?)
 
+    # doesn't look like the best solution but what's the alternative?
+    where_data = filters if filters else None
 
-    # filters = list of lists?
-    # [[matrix, titanic], [action, drama], [year]]
-
-    # filters = list of dicts?
-    # [
-    #   {
-    #       "movie_title":
-    #   }
-    # ]
-
-    # where_data = []
-
-    # for list_of_filters in filters:
-    #     for item in list_of_filters:
-    #         {
-    #             'column': 'title',
-    #             'operator': '=',
-    #             'value': 'matrix'
-    #         },
-    #         {
-    #             'column': 'title',
-    #             'operator': '=',
-    #             'value': 'titanic'
-    #         },
-    #         {
-    #             'column': 'year',
-    #             'operator': '>',
-    #             'value': 1998
-    #         }
-
-
-
-
-    all_movies = mysql_service.select_all(table_name, columns, where_data=None, order_by_columns=[], limit={})
-    return all_movies
+    results = mysql_service.select_all(table_name, columns, where_data, order_by_columns=[], limit={})
+    return results
 
 def find_movie_by_id(movie_id, columns=[]):
 
