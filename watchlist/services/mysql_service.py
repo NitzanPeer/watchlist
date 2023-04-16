@@ -131,7 +131,6 @@ class MySQLService:
             for order_by in order_by_columns:
 
                 order = order_by.get('order', 'ASC')
-                # order = order_by['order'] if 'order' in order_by and order_by['order'] else 'ASC'
                 order_by_clause += f" {order_by['column']} {order}"
                 counter += 1
                 if counter != len(order_by_columns):

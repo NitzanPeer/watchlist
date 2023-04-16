@@ -2,7 +2,7 @@ from tabulate import tabulate
 from ..services import ui_service
 
 
-# options = list of dicts/lists (like rows in table)
+# options = list of lists (like rows in table)
 # headers = list of strings
 def print_options_table(headers, options):
 
@@ -76,4 +76,3 @@ def print_delete_movie_summary(movie_title):
 
 def print_movie_was_not_deleted():
     print(f"\nThe movie was not deleted.\n")
-

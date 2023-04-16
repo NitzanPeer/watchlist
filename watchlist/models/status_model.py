@@ -25,13 +25,6 @@ def add_watch_status(movie_id, watch_status):
     result = mysql_service.insert(table_name, movie_data)
     return result
 
-def delete_watch_status_by_movie_id(movie_id):
-
-    where_condition = MySQLService.create_where_data("movie_id", "=", movie_id)
-
-    result = mysql_service.delete(table_name, where_condition)
-    return result
-
 def update_watch_status(movie_id, watch_status):
 
     if is_watched(movie_id) == watch_status:
@@ -71,9 +64,20 @@ def get_watch_status_by_movie_id(movie_id):
 def is_watched(movie_id):
     return get_watch_status_by_movie_id(movie_id)
 
+
+
+# funcs that aren't in use:
+
 def create_table_if_not_exist():
     if not is_table_exist('watch_status'):
         mysql_service.raw_query(create_table_query)
 
 def is_table_exist(table_name):
     return mysql_service.is_table_exist(table_name)
+
+def delete_watch_status_by_movie_id(movie_id):
+
+    where_condition = MySQLService.create_where_data("movie_id", "=", movie_id)
+
+    result = mysql_service.delete(table_name, where_condition)
+    return result

@@ -3,11 +3,6 @@ from ..services.mysql_service import MySQLService
 from typing import Any
 
 
-# table = 'movies'
-# tmdb_id = 69
-# tmdb_json = TmdbAPI.get(tmdb_id)
-# omdb_json = OmdbAPI.get(tmdb_json['imdb_id'])
-
 table_name = "movies"
 create_table_query = \
 f"""
@@ -43,7 +38,6 @@ def __find_movie_by_column(column_name, column_value, columns=[], one_result = F
 
 def add_movie(title, year, director, genres, imdb_id, imdb_score, rotten_tomatoes_score, description):
 
-
     movie_info = {
         'title': title,
         'year': year,
@@ -56,38 +50,6 @@ def add_movie(title, year, director, genres, imdb_id, imdb_score, rotten_tomatoe
     }
 
     return mysql_service.insert(table_name, movie_info)
-
-def find_all_movies_join_watch_status(where_config={}, args=[]):
-
-    where_data = []
-    for key, value in args:
-        if value or isinstance(value, bool):
-            where_data.extend(MySQLService.create_multiple_where_data(value, where_config[key]["column"], where_config[key]["operator"]))
-
-    join_data = {
-        "target_table": "watch_status",
-        "source_column": "id",
-        "target_column": "movie_id"
-     }
-
-    columns = [
-        "movies.*", "watch_status.watch_status"
-    ]
-
-    return mysql_service.select_all(table_name, columns, join_data=join_data, where_data=where_data, order_by_columns=[], limit={})
-
-
-def find_movie_by_id(movie_id, columns=[]):
-
-    return __find_movie_by_column('id', movie_id, columns, True)
-
-def find_movie_by_imdb_id(imdb_id, columns=[]):
-
-    return __find_movie_by_column('imdb_id', imdb_id, columns, True)
-
-def find_movies_by_title(movie_title, columns=[]):
-
-    return __find_movie_by_column('title', movie_title, columns, operator="like")
 
 def delete_movie_by_id(id):
 
@@ -113,6 +75,43 @@ def update_movie_scores_by_id(id, imdb_score=None, rotten_tomatoes_score=None):
 
     result = mysql_service.update(table_name, set_data, where_condition)
     return result
+
+def find_all_movies_join_watch_status(where_config={}, args=[]):
+
+    where_data = []
+    for key, value in args:
+        if value or isinstance(value, bool):
+            where_data.extend(MySQLService.create_multiple_where_data(value, where_config[key]["column"], where_config[key]["operator"]))
+
+    join_data = {
+        "target_table": "watch_status",
+        "source_column": "id",
+        "target_column": "movie_id"
+     }
+
+    columns = [
+        "movies.*", "watch_status.watch_status"
+    ]
+
+    return mysql_service.select_all(table_name, columns, join_data=join_data, where_data=where_data, order_by_columns=[], limit={})
+
+
+def find_movies_by_title(movie_title, columns=[]):
+
+    return __find_movie_by_column('title', movie_title, columns, operator="like")
+
+
+
+
+# funcs that aren't in use anywhere:
+
+def find_movie_by_id(movie_id, columns=[]):
+
+    return __find_movie_by_column('id', movie_id, columns, True)
+
+def find_movie_by_imdb_id(imdb_id, columns=[]):
+
+    return __find_movie_by_column('imdb_id', imdb_id, columns, True)
 
 def create_table_if_not_exist():
     if not is_table_exist('movies'):

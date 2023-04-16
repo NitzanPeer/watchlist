@@ -87,17 +87,3 @@ def add_movie_to_db(movie_data):
 
 def is_movie_exists(imdb_id):
     return bool(models.find_movie_by_imdb_id(imdb_id))
-
-# TODO: how do we display 5 results instead of a full page?
-def get_five_results(page_results, starting_point):
-    five_results = []
-
-    for index, result in enumerate(page_results):
-        if index < 5:
-            five_results.append(result)
-
-    for result in page_results[starting_point:]:
-        five_results.append(result)
-
-
-
