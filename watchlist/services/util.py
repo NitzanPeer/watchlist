@@ -1,6 +1,3 @@
-from ..services import ui_service
-
-
 def extract_title_and_year(options):
 
     extracted_data = []
@@ -11,4 +8,3 @@ def extract_title_and_year(options):
         })
 
     return extracted_data
-

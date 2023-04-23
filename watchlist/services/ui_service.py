@@ -6,24 +6,28 @@ from ..services import ui_service
 # headers = list of strings
 def print_options_table(headers, options):
 
-    table = []
+    if options:
 
-    headers.insert(0, "")
+        table = []
 
-    table.append(headers)
+        headers.insert(0, "")
 
-    for index, option in enumerate(options):
+        table.append(headers)
 
-        row = []
-        row.append(index+1)
+        for index, option in enumerate(options):
 
-        for key in option.keys():
-            row.append(option[key])
+            row = []
+            row.append(index+1)
 
-        table.append(row)
+            for key in option.keys():
+                row.append(option[key])
 
+            table.append(row)
 
-    print(tabulate(table, headers='firstrow', tablefmt='fancy_grid', maxcolwidths=15, numalign="left", stralign="left" ))
+        print(tabulate(table, headers='firstrow', tablefmt='fancy_grid', maxcolwidths=15, numalign="left", stralign="left" ))
+
+    else:
+        print_no_movies_found()
 
 def get_valid_chosen_option_from_options(options, query, extra_choices=[]):
 
@@ -62,7 +66,6 @@ def confirm_choice(query):
 
 
 
-
 def print_add_movie_summary(movie_title):
     print(f"\nThe movie {movie_title} was added to the database.\n")
 
@@ -76,3 +79,6 @@ def print_delete_movie_summary(movie_title):
 
 def print_movie_was_not_deleted():
     print(f"\nThe movie was not deleted.\n")
+
+def print_no_movies_found():
+    print(f"\nNo movies were found.\n")

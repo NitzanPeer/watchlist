@@ -40,8 +40,6 @@ class TmdbAPI:
                 return user_input
 
 
-
-
     @staticmethod
     def search(movie_title, page_num):
         # https://api.themoviedb.org/3/search/movie?api_key=b5b1baac3d56cc9ee08b4e017486795d&language=en-US&query=Titanic&page=1&include_adult=false

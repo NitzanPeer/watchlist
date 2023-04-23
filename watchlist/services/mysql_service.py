@@ -253,7 +253,7 @@ class MySQLService:
     def create_multiple_where_data(list_of_items, name_of_column, operator_type):
         result_clause = []
 
-        if not isinstance(list_of_items, list):
+        if not isinstance(list_of_items, list) and not isinstance(list_of_items, tuple):
             list_of_items = [list_of_items]
 
         for item in list_of_items:

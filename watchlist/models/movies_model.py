@@ -1,6 +1,4 @@
-from ..services import util
 from ..services.mysql_service import MySQLService
-from typing import Any
 
 
 table_name = "movies"
@@ -103,7 +101,7 @@ def find_movies_by_title(movie_title, columns=[]):
 
 
 
-# funcs that aren't in use anywhere:
+# funcs that aren't in use:
 
 def find_movie_by_id(movie_id, columns=[]):
 

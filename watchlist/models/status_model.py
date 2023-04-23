@@ -1,4 +1,3 @@
-from ..services import util
 from ..services.mysql_service import MySQLService
 from ..services import exceptions
 
@@ -44,7 +43,7 @@ def mark_as_watched(movie_id):
 def mark_as_unwatched(movie_id):
     return update_watch_status(movie_id, False)
 
-def get_watch_status_by_movie_id(movie_id):
+def find_watch_status_by_movie_id(movie_id):
 
     where_condition = MySQLService.create_where_data("movie_id", "=", movie_id)
 
@@ -62,7 +61,7 @@ def get_watch_status_by_movie_id(movie_id):
     return bool(result['watch_status']) if result else None
 
 def is_watched(movie_id):
-    return get_watch_status_by_movie_id(movie_id)
+    return find_watch_status_by_movie_id(movie_id)
 
 
 

@@ -11,9 +11,6 @@ def get(tmdb_id):
     tmdb_result = TmdbAPI.get(tmdb_id)
     omdb_result = OmdbAPI.get(tmdb_result["imdb_id"])
 
-    #TODO:
-    # if not all needed keys are exist - throw an error
-    # (if year not exist - do we accept?)
 
     return {
         "title":tmdb_result["title"],
